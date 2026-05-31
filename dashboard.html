@@ -404,7 +404,7 @@
                     <div class="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-500 to-fuchsia-500 flex items-center justify-center shadow-sm text-white">
                         <i class="fa-regular fa-id-badge text-lg"></i>
                     </div>
-                    Pengaturan Profil
+                    Pengaturan Profile
                 </h2>
                 <button @click="isProfileModalOpen = false" class="text-slate-400 hover:text-rose-500 w-8 h-8 bg-white rounded-full flex items-center justify-center transition-all shadow-sm"><i class="fa-solid fa-xmark"></i></button>
             </div>
@@ -450,7 +450,7 @@
 
                     <div class="pt-4 mt-2">
                         <button type="submit" :disabled="isSavingProfile" class="w-full bg-gradient-to-r from-indigo-600 to-fuchsia-600 hover:from-indigo-700 hover:to-fuchsia-700 text-white font-bold py-3.5 rounded-xl shadow-xl transition-all transform hover:-translate-y-1 flex justify-center items-center gap-2">
-                            <span x-text="isSavingProfile ? 'Menyimpan Profil...' : 'Simpan Perubahan'"></span>
+                            <span x-text="isSavingProfile ? 'Menyimpan Profile...' : 'Simpan Perubahan'"></span>
                             <i class="fa-solid fa-floppy-disk" x-show="!isSavingProfile"></i>
                             <i class="fa-solid fa-circle-notch fa-spin" x-show="isSavingProfile"></i>
                         </button>
@@ -649,10 +649,8 @@
                 },
 
                 // Menginisialisasi pelacakan real-time
-              // ==========================================
-                // MESIN MULTIPLAYER (VERSI OPTIMASI ANTI-LEMOT)
-                // ==========================================
                 initPresence() {
+                    // 1. Fungsi untuk melaporkan lokasi kita saat ini
                     const updateMyPresence = () => {
                         const myName = this.userProfile.namaLengkap || 'Guest ' + this.mySessionId.substr(-4);
                         const presenceData = {
@@ -666,11 +664,12 @@
                         localStorage.setItem('omni_presence_' + this.mySessionId, JSON.stringify(presenceData));
                     };
 
+                    // 2. Fungsi untuk membaca lokasi rekan kerja lain
                     const readPresence = () => {
                         const now = Date.now();
                         const users = [];
                         
-                        // Bot simulasi
+                        // Menambahkan bot simulasi agar kamu bisa melihat fiturnya meskipun sendirian
                         users.push({
                             id: 'sim_nabil', name: 'Nabil (Rekan)', initial: 'N', color: 'bg-emerald-500',
                             location: 'Project Planning', lastSeen: now
@@ -681,38 +680,32 @@
                             if (key.startsWith('omni_presence_')) {
                                 try {
                                     const data = JSON.parse(localStorage.getItem(key));
-                                    // Toleransi waktu diperpanjang jadi 15 detik agar tidak mudah hilang
-                                    if (now - data.lastSeen < 15000) {
+                                    // Jika aktif dalam 10 detik terakhir, masukkan ke daftar online
+                                    if (now - data.lastSeen < 10000) {
+                                        // Jangan masukkan bot jika sudah ada
                                         users.push(data);
                                     } else {
-                                        localStorage.removeItem(key);
+                                        localStorage.removeItem(key); // Bersihkan jejak user yang sudah offline
                                     }
                                 } catch(e) {}
                             }
                         }
                         
+                        // Hapus duplikat berdasarkan ID
                         const uniqueUsers = Array.from(new Map(users.map(item => [item.id, item])).values());
-                        const sortedUsers = uniqueUsers.sort((a, b) => (a.id === (this.user.idUser || this.mySessionId) ? -1 : 1));
-
-                        // ⚡ KUNCI ANTI-LEMOT: Hanya render ulang DOM jika posisi ada yang berubah!
-                        const newDataString = JSON.stringify(sortedUsers);
-                        if (this._lastPresenceData !== newDataString) {
-                            this.onlineUsers = sortedUsers;
-                            this._lastPresenceData = newDataString; // Simpan memori posisi terakhir
-                        }
+                        // Urutkan: Diri sendiri selalu di depan
+                        this.onlineUsers = uniqueUsers.sort((a, b) => (a.id === (this.user.idUser || this.mySessionId) ? -1 : 1));
                     };
 
-                    // Jalankan detak jantung pertama kali
+                    // Jalankan detak jantung (heartbeat) setiap 2 detik
                     updateMyPresence();
                     readPresence();
-                    
-                    // Interval diperlambat menjadi 5 detik (5000ms) agar CPU HP bisa bernapas lega
                     setInterval(() => {
                         updateMyPresence();
                         readPresence();
-                    }, 5000);
+                    }, 2000);
 
-                    // Reaksi jika ada tab lain berubah
+                    // Reaksi kilat jika ada tab lain yang berpindah fitur
                     window.addEventListener('storage', (e) => {
                         if(e.key && e.key.startsWith('omni_presence_')) readPresence();
                     });
@@ -996,73 +989,57 @@
                 },
                 // 7. SUBMIT FORM KE BACKEND DENGAN AUDIT LOG
               
-               // ==========================================
-                // FUNGSI SIMPAN DATA (VERSI BACKGROUND SYNC ANTI-LEMOT)
-                // ==========================================
                 async submitForm() {
-                    // 1. Gandakan data form saat ini agar tidak hilang saat modal kita paksa tutup
-                    const currentData = { ...this.formData };
-                    const mode = this.modalMode;
-
-                    // 2. KUNCI UTAMA: Langsung tutup modal detik ini juga! (UX jadi terasa instan)
-                    this.isModalOpen = false;
-
-                    // 3. Munculkan notifikasi kecil (Toast) bahwa sistem sedang bekerja diam-diam
-                    Swal.mixin({
-                        toast: true, position: 'top-end', showConfirmButton: false, timer: 3000,
-                        customClass: { popup: 'rounded-2xl bg-white/95 backdrop-blur-md border border-white/60 shadow-xl' }
-                    }).fire({
-                        icon: 'info',
-                        title: '<span class="text-sm font-extrabold text-slate-800 ml-2">Menyimpan di latar belakang...</span>'
-                    });
-
-                    // 4. Siapkan paket data untuk dikirim
-                // 4. Siapkan paket data menggunakan FormData (Jurus Ultimate Anti-CORS)
-                    const formData = new FormData();
-                    formData.append('action', mode === 'add' ? 'add_data' : 'update_data');
-                    formData.append('idTim', this.idTim);
-                    formData.append('tabName', this.activeFeature.tabName);
+                    this.isSubmitting = true;
                     
-                    for (const key in currentData) {
-                        if (currentData[key] !== undefined && currentData[key] !== null) {
-                            formData.append(key, currentData[key]);
-                        }
+                    const payload = new URLSearchParams();
+                    // Mode 'add' menggunakan action 'add_card', Mode 'edit' menggunakan 'update_card'
+                    const actionType = this.modalMode === 'add' ? 'add_card' : 'update_card';
+                    
+                   payload.append('action', actionType);
+                    payload.append('targetTab', this.activeFeature.tabName);
+                    payload.append('idTim', this.idTim); // Ini untuk dibaca oleh sistem Backend
+                    payload.append('ID Tim', this.idTim); // INI KUNCINYA: Untuk mengisi kolom 'ID Tim' di Google Sheets!
+                    payload.append('idUser', this.user.idUser);
+                    
+                    if(this.modalMode === 'edit') {
+                        payload.append('idData', this.formData[this.activeFeature.idKey]);
                     }
 
-                    // 5. Proses Fetch (POST Murni tanpa Headers buatan)
+                    // Append semua field isian user
+                    for (let key in this.formData) {
+                        payload.append(key, this.formData[key]);
+                    }
+
                     try {
-                        // Kita biarkan browser yang mengurus "Content-Type" secara otomatis
-                        const response = await fetch(SCRIPT_URL, {
-                            method: 'POST',
-                            body: formData
-                        });
-                        
+                        const response = await fetch(SCRIPT_URL, { method: 'POST', body: payload });
                         const json = await response.json();
+                        
+                       if(json.status === 'success') {
+    Swal.fire({
+        title: 'Berhasil!',
+        text: json.message,
+        iconHtml: '<i class="fa-solid fa-check"></i>',
+        customClass: {
+            popup: 'rounded-3xl',
+            icon: 'custom-swal-success-icon'
+        },
+        timer: 1500,
+        showConfirmButton: false
+    });
 
-                        if (json.status === 'success') {
-                            
-                            // Tarik data terbaru dari Google Sheets secara diam-diam
-                            await this.fetchData();
-
-                            // Munculkan notifikasi SUKSES!
-                            Swal.mixin({
-                                toast: true, position: 'top-end', showConfirmButton: false, timer: 3000,
-                                customClass: { popup: 'rounded-2xl bg-white/95 backdrop-blur-md border border-emerald-500/30 shadow-xl p-4 flex items-center z-[9999]' }
-                            }).fire({
-                                icon: 'success',
-                                title: '<span class="text-sm font-extrabold text-slate-800 ml-2">Berhasil disimpan!</span>'
-                            });
-
-                        } else {
-                            Swal.fire('Gagal Menyimpan', json.message, 'error');
-                        }
-                    } catch (error) {
-                        console.error("Error Simpan:", error);
-                        // Jika masih gagal karena delay jaringan, kita tetap optimis
-                        Swal.fire('Koneksi Lemah', 'Google Server merespon lambat, tapi data biasanya sudah masuk. Silakan muat ulang halaman.', 'warning');
+    this.modalOpen = false;
+    this.fetchData(); // Muat ulang data terbaru
+} else {
+    Swal.fire('Gagal', json.message, 'error');
+}
+                    } catch(e) {
+                        Swal.fire('Error', 'Gagal menghubungi server database.', 'error');
+                    } finally {
+                        this.isSubmitting = false;
                     }
-                
-                },
+                }
+            
             }
         }
     </script>
