@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotionClone | Premium Workspace Setup</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['"Outfit"', 'sans-serif'] } } } }
+    </script>
+
+    <style>
+        /* ==========================================
+           1. BACKGROUND ETHEREAL AURORA (PREMIUM GRADIENT)
+           ========================================== */
+        body {
+            background: linear-gradient(-45deg, #e0c3fc, #8ec5fc, #ffecd2, #fcb69f);
+            background-size: 400% 400%;
+            animation: auroraBG 15s ease infinite alternate;
+            font-family: 'Outfit', sans-serif;
+            color: #1e293b;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        @keyframes auroraBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        /* ORNAMEN CAHAYA MELAYANG */
+        .glow-orb-1 { position: absolute; top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 70%); border-radius: 50%; animation: float 12s infinite ease-in-out; pointer-events: none; }
+        .glow-orb-2 { position: absolute; bottom: -20%; right: -10%; width: 60vw; height: 60vw; background: radial-gradient(circle, rgba(165,180,252,0.3) 0%, rgba(165,180,252,0) 70%); border-radius: 50%; animation: float 15s infinite ease-in-out reverse; pointer-events: none; }
+        @keyframes float { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-50px) scale(1.1); } }
+
+        /* ==========================================
+           2. GLASSMORPHISM MEWAH
+           ========================================== */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 25px 50px -12px rgba(31, 38, 135, 0.15), inset 0 0 0 1px rgba(255,255,255,0.3);
+            border-radius: 2.5rem;
+        }
+
+        .glass-input {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            color: #334155;
+            transition: all 0.3s ease;
+        }
+        .glass-input:focus { background: rgba(255, 255, 255, 0.9); border-color: #6366f1; box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15); outline: none; }
+        
+        .swal2-popup { border-radius: 24px !important; background: rgba(255, 255, 255, 0.95) !important; backdrop-filter: blur(20px) !important; border: 1px solid rgba(255,255,255,0.8) !important; }
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body class="p-4" x-data="authWorkspaceApp()">
+    
+    <div class="glow-orb-1"></div>
+    <div class="glow-orb-2"></div>
+
+    <main class="glass-panel w-full max-w-5xl flex flex-col md:flex-row relative z-10 min-h-[600px] overflow-hidden">
+        
+        <div class="hidden md:flex md:w-[45%] relative p-12 flex-col justify-between overflow-hidden bg-gradient-to-br from-indigo-500/20 to-fuchsia-500/20 border-r border-white/40">
+            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=1000&auto=format&fit=crop')] bg-cover bg-center mix-blend-overlay opacity-30"></div>
+            
+            <div class="relative z-10">
+                <div class="w-12 h-12 bg-white rounded-xl shadow-lg flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-layer-group text-2xl text-indigo-600"></i>
+                </div>
+                <a href="#" class="text-3xl font-extrabold text-slate-800 tracking-tight">Omni<span class="text-indigo-600">Space</span></a>
+            </div>
+
+            <div class="relative z-10 space-y-4">
+                <h1 class="text-4xl font-extrabold text-slate-800 leading-tight">Satu Workspace <br> <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-fuchsia-600">Tanpa Batas.</span></h1>
+                <p class="text-slate-600 font-medium">Buat tim, kelola 31 modul fitur enterprise, dan lacak seluruh aktivitas tim dengan sistem isolasi privasi level tinggi.</p>
+            </div>
+        </div>
+
+        <div class="w-full md:w-[55%] p-8 md:p-12 relative flex items-center justify-center min-h-[500px]">
+            <div class="w-full max-w-md relative">
+
+                <div x-show="view === 'login'" x-transition.duration.500ms x-cloak>
+                    <div class="text-center mb-8">
+                        <h2 class="text-3xl font-extrabold text-slate-800 mb-2">Welcome Back</h2>
+                        <p class="text-sm text-slate-600 font-medium">Masuk untuk melanjutkan ke Workspace Anda.</p>
+                    </div>
+
+                    <form @submit.prevent="submitAuth('login')" class="space-y-5">
+                        <div>
+                            <label class="block text-[11px] font-extrabold text-slate-500 uppercase tracking-widest mb-2 ml-1">Email Terdaftar</label>
+                            <div class="relative">
+                                <i class="fa-regular fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <input type="email" x-model="auth.email" required class="w-full glass-input rounded-2xl pl-11 pr-4 py-3.5 font-medium" placeholder="mail@perusahaan.com">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] font-extrabold text-slate-500 uppercase tracking-widest mb-2 ml-1">Password</label>
+                            <div class="relative">
+                                <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <input type="password" x-model="auth.password" required class="w-full glass-input rounded-2xl pl-11 pr-4 py-3.5 font-medium tracking-widest" placeholder="••••••••">
+                            </div>
+                        </div>
+
+                        <button type="submit" :disabled="isLoading" class="w-full mt-4 bg-gradient-to-r from-indigo-600 to-fuchsia-600 text-white font-bold py-4 rounded-2xl shadow-lg hover:shadow-indigo-500/30 transition-all flex justify-center items-center gap-2 transform hover:-translate-y-1">
+                            <span x-text="isLoading ? 'Memverifikasi...' : 'Sign In'"></span>
+                            <i class="fa-solid fa-circle-notch fa-spin" x-show="isLoading" x-cloak></i>
+                        </button>
+                    </form>
+
+                    <p class="text-center mt-8 text-sm text-slate-600 font-medium">
+                        Belum punya akun? <button @click="view = 'register'" class="font-extrabold text-indigo-600 hover:underline">Daftar Workspace</button>
+                    </p>
+                </div>
+
+                <div x-show="view === 'register'" x-transition.duration.500ms x-cloak>
+                    <div class="text-center mb-8">
+                        <h2 class="text-3xl font-extrabold text-slate-800 mb-2">Create Account</h2>
+                        <p class="text-sm text-slate-600 font-medium">Daftar untuk membuat Workspace Tim Anda.</p>
+                    </div>
+
+                    <form @submit.prevent="submitAuth('register')" class="space-y-4">
+                        <div>
+                            <label class="block text-[11px] font-extrabold text-slate-500 uppercase tracking-widest mb-2 ml-1">Nama Lengkap</label>
+                            <input type="text" x-model="auth.namaLengkap" required class="w-full glass-input rounded-xl px-4 py-3 font-medium" placeholder="Mohmmad Nabilah Abror">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-extrabold text-slate-500 uppercase tracking-widest mb-2 ml-1">Alamat Email</label>
+                            <input type="email" x-model="auth.email" required class="w-full glass-input rounded-xl px-4 py-3 font-medium" placeholder="mail@perusahaan.com">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-extrabold text-slate-500 uppercase tracking-widest mb-2 ml-1">Buat Password</label>
+                            <input type="password" x-model="auth.password" required class="w-full glass-input rounded-xl px-4 py-3 font-medium tracking-widest" placeholder="••••••••">
+                        </div>
+
+                        <button type="submit" :disabled="isLoading" class="w-full mt-4 bg-slate-800 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-slate-900 transition-all flex justify-center items-center gap-2">
+                            <span x-text="isLoading ? 'Menyiapkan Akun...' : 'Register Akun'"></span>
+                            <i class="fa-solid fa-circle-notch fa-spin" x-show="isLoading" x-cloak></i>
+                        </button>
+                    </form>
+
+                    <p class="text-center mt-6 text-sm text-slate-600 font-medium">
+                        Sudah punya akun? <button @click="view = 'login'" class="font-extrabold text-indigo-600 hover:underline">Masuk</button>
+                    </p>
+                </div>
+<div x-show="view === 'select_team'" x-transition.duration.500ms x-cloak>
+                    <div class="text-center mb-6">
+                        <div class="w-16 h-16 mx-auto bg-indigo-100 rounded-full flex items-center justify-center mb-3 border-4 border-white shadow-sm">
+                            <i class="fa-solid fa-door-open text-2xl text-indigo-600"></i>
+                        </div>
+                        <h2 class="text-2xl font-extrabold text-slate-800 mb-1">Pilih Workspace</h2>
+                        <p class="text-sm text-slate-600 font-medium">Lanjutkan ke tim Anda yang sudah ada.</p>
+                    </div>
+
+                    <form @submit.prevent="joinTeam" class="space-y-4">
+                        <div>
+                            <label class="block text-[11px] font-extrabold text-slate-500 uppercase tracking-widest mb-1.5 ml-1">Masukkan ID Tim / Link Invite</label>
+                            <input type="text" x-model="joinTeamId" required class="w-full glass-input rounded-xl px-4 py-3.5 font-bold text-slate-800" placeholder="Contoh: TIM-1780173536337">
+                        </div>
+                        <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-fuchsia-600 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-indigo-500/30 transition-all transform hover:-translate-y-1 flex justify-center items-center gap-2">
+                            Masuk ke Dashboard <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </form>
+
+                    <div class="mt-6 border-t border-slate-200/60 pt-6 text-center">
+                        <p class="text-sm text-slate-500 font-medium mb-3">Atau ingin membuat tim baru?</p>
+                        <button @click="view = 'create_team'" class="w-full bg-white/60 border border-slate-300 text-slate-700 font-bold py-3.5 rounded-xl hover:bg-white transition-all flex justify-center items-center gap-2 shadow-sm">
+                            <i class="fa-solid fa-plus"></i> Buat Workspace Baru
+                        </button>
+                    </div>
+                </div>
+                <div x-show="view === 'create_team'" x-transition.duration.500ms x-cloak>
+                    <div class="text-center mb-6">
+                        <div class="w-16 h-16 mx-auto bg-indigo-100 rounded-full flex items-center justify-center mb-3 border-4 border-white shadow-sm">
+                            <i class="fa-solid fa-rocket text-2xl text-indigo-600"></i>
+                        </div>
+                        <h2 class="text-2xl font-extrabold text-slate-800 mb-1">Setup Workspace</h2>
+                        <p class="text-sm text-slate-600 font-medium">Buat ruang kerja untuk berkolaborasi dengan tim Anda.</p>
+                    </div>
+
+                    <form @submit.prevent="submitTeam" class="space-y-4">
+                        <div>
+                            <label class="block text-[11px] font-extrabold text-slate-500 uppercase tracking-widest mb-1.5 ml-1">Nama Tim / Perusahaan</label>
+                            <input type="text" x-model="team.namaTim" required class="w-full glass-input rounded-xl px-4 py-3 font-bold text-slate-800" placeholder="Cth: OmniCreative Studio">
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[11px] font-extrabold text-slate-500 uppercase tracking-widest mb-1.5 ml-1">Maks. Anggota</label>
+                                <input type="number" x-model="team.maksAnggota" required min="1" class="w-full glass-input rounded-xl px-4 py-3 font-medium" placeholder="10">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-extrabold text-slate-500 uppercase tracking-widest mb-1.5 ml-1">Privasi Akses</label>
+                                <select x-model="team.tipeAkses" required class="w-full glass-input rounded-xl px-4 py-3 font-bold text-slate-800">
+                                    <option value="Terbuka">Terbuka (Link)</option>
+                                    <option value="Khusus Tim">Private (Email)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div x-show="team.tipeAkses === 'Khusus Tim'" x-collapse>
+                            <label class="block text-[11px] font-extrabold text-slate-500 uppercase tracking-widest mb-1.5 ml-1">Daftar Email Anggota (Pisahkan dgn Koma)</label>
+                            <textarea x-model="team.daftarEmailAnggota" rows="3" class="w-full glass-input rounded-xl px-4 py-3 font-medium text-sm" placeholder="andi@mail.com, budi@mail.com"></textarea>
+                            <p class="text-[10px] text-rose-500 font-bold mt-1 ml-1">*Hanya email ini yang bisa membuka link dashboard nanti.</p>
+                        </div>
+
+                        <button type="submit" :disabled="isLoading" class="w-full mt-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-emerald-500/30 transition-all transform hover:-translate-y-1 flex justify-center items-center gap-2">
+                            <span x-text="isLoading ? 'Membangun Workspace...' : 'Generate Workspace & Link'"></span>
+                            <i class="fa-solid fa-hammer" x-show="!isLoading"></i>
+                            <i class="fa-solid fa-circle-notch fa-spin" x-show="isLoading" x-cloak></i>
+                        </button>
+                    </form>
+                </div>
+
+                <div x-show="view === 'team_success'" x-transition.duration.500ms x-cloak class="text-center">
+                    <div class="w-20 h-20 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-6 border-4 border-white shadow-sm">
+                        <i class="fa-solid fa-check text-4xl text-green-500"></i>
+                    </div>
+                    <h2 class="text-3xl font-extrabold text-slate-800 mb-2">Workspace Siap!</h2>
+                    <p class="text-sm text-slate-600 font-medium mb-8">Salin link ajaib di bawah ini dan bagikan ke anggota tim Anda.</p>
+
+                    <div class="bg-white/60 border border-indigo-200 p-4 rounded-2xl mb-8 relative group">
+                        <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Your Invite Link</p>
+                        <div class="bg-slate-100 p-3 rounded-xl border border-slate-200 font-mono text-xs text-indigo-700 break-all select-all flex items-center justify-between gap-3">
+                            <span x-text="generatedLink"></span>
+                            <button @click="copyLink" class="w-8 h-8 shrink-0 bg-white rounded flex justify-center items-center text-slate-500 hover:text-indigo-600 hover:shadow-sm transition-all">
+                                <i class="fa-regular fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button @click="goToDashboard" class="w-full bg-slate-800 text-white font-bold py-4 rounded-xl shadow-xl hover:bg-slate-900 transition-all flex justify-center items-center gap-2">
+                        Masuk ke Dashboard Tim <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // PASTE URL DEPLOYMENT GOOGLE SCRIPT MU DISINI:
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxMNgov6EUtksI16RuxYu8G2EVUWHYp-9jzBjzvoFaozMzefPrPfo_NussB1e2gqoN34g/exec'; 
+
+        function authWorkspaceApp() {
+            return {
+                view: 'login', // Default: 'login', 'register', 'create_team', 'team_success'
+                isLoading: false,
+                
+                // Data Form Autentikasi
+                auth: { namaLengkap: '', email: '', password: '' },
+                
+                // Data Form Pembuatan Tim
+                team: { namaTim: '', maksAnggota: '10', tipeAkses: 'Terbuka', daftarEmailAnggota: '' },
+                
+                // Data Session
+                session: { idUser: '', emailUser: '' },
+                generatedLink: '',
+                joinTeamId: '',
+
+                async submitAuth(actionType) {
+                    this.isLoading = true;
+                    const payload = new URLSearchParams();
+                    payload.append('action', actionType);
+                    payload.append('email', this.auth.email);
+                    payload.append('password', this.auth.password);
+                    if(actionType === 'register') payload.append('namaLengkap', this.auth.namaLengkap);
+
+                    try {
+                        const response = await fetch(SCRIPT_URL, { method: 'POST', body: payload });
+                        const result = await response.json();
+
+                        if (result.status === 'success') {
+                            if (actionType === 'register') {
+                                Swal.fire('Registrasi Sukses!', 'Silakan masuk menggunakan akun baru Anda.', 'success');
+                                this.view = 'login';
+                                this.auth.password = ''; // Bersihkan password
+                            } else if (actionType === 'login') {
+                                // Simpan ke session lokal
+                                this.session.idUser = result.idUser;
+                                this.session.emailUser = result.email;
+                                localStorage.setItem('notionClone_User', JSON.stringify(this.session));
+                                
+                                // Lompat ke halaman pembuatan tim
+                                this.view = 'select_team';
+                            }
+                        } else {
+                            Swal.fire('Gagal', result.message, 'error');
+                        }
+                    } catch (err) {
+                        Swal.fire('Koneksi Terputus', 'Gagal menyambungkan ke server database.', 'error');
+                    } finally {
+                        this.isLoading = false;
+                    }
+                },
+
+                async submitTeam() {
+                    this.isLoading = true;
+                    const payload = new URLSearchParams();
+                    payload.append('action', 'create_team');
+                    payload.append('emailPembuat', this.session.emailUser);
+                    payload.append('namaTim', this.team.namaTim);
+                    payload.append('maksAnggota', this.team.maksAnggota);
+                    payload.append('tipeAkses', this.team.tipeAkses);
+                    payload.append('daftarEmailAnggota', this.team.daftarEmailAnggota);
+
+                    try {
+                        const response = await fetch(SCRIPT_URL, { method: 'POST', body: payload });
+                        const result = await response.json();
+
+                        if (result.status === 'success') {
+                            // Simpan ID Tim ke lokal storage
+                            localStorage.setItem('notionClone_idTim', result.idTim);
+                            
+                            // Buat link invite ajaib
+                            // Nanti "dashboard.html" diganti dengan nama file/link dashboard-mu yang asli
+                            const baseURL = window.location.href.substring(0, window.location.href.lastIndexOf('/'));
+                            this.generatedLink = `${baseURL}/dashboard.html?team=${result.idTim}`;
+                            
+                            this.view = 'team_success';
+                        } else {
+                            Swal.fire('Gagal', result.message, 'error');
+                        }
+                    } catch (err) {
+                        Swal.fire('Koneksi Terputus', 'Gagal menyimpan data tim.', 'error');
+                    } finally {
+                        this.isLoading = false;
+                    }
+                },
+// FUNGSI BARU: Untuk masuk ke tim yang sudah ada
+                joinTeam() {
+                    if(!this.joinTeamId) return;
+                    
+                    // Bersihkan input (jika user ga sengaja mem-paste full URL, ambil ID-nya saja)
+                    let cleanId = this.joinTeamId.trim();
+                    if(cleanId.includes('?team=')) {
+                        cleanId = cleanId.split('?team=')[1];
+                    }
+                    
+                    // Simpan ID Tim ke lokal storage
+                    localStorage.setItem('notionClone_idTim', cleanId);
+                    
+                    // Arahkan langsung ke dashboard
+                    const baseURL = window.location.href.substring(0, window.location.href.lastIndexOf('/'));
+                    window.location.href = `${baseURL}/dashboard.html?team=${cleanId}`;
+                },
+               // ==========================================
+                // REVISI PREMIUM: COPY LINK DENGAN TOAST PRESISI
+                // ==========================================
+                copyLink() {
+                    navigator.clipboard.writeText(this.generatedLink);
+                    
+                    // Konfigurasi Toast Notification Premium (Kebal Centang Miring)
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end', // Di pojok kanan atas, tidak mengunci layar
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        // Gaya Glassmorphism Premium
+                        customClass: { 
+                            popup: 'rounded-2xl bg-white/95 backdrop-blur-md border border-white/60 shadow-xl p-4 flex items-center',
+                            title: 'text-slate-800 font-extrabold text-sm ml-3',
+                            icon: 'm-0 flex items-center justify-center' // Paksa ikon presisi di tengah kontainernya
+                        },
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    });
+
+                    // Tembakkan notifikasi
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Tersalin!',
+                        html: '<p class="text-xs text-slate-600 font-medium ml-3 mt-1">Link siap dibagikan ke tim Anda.</p>'
+                    });
+                },
+
+                goToDashboard() {
+                    // Berpindah halaman ke dashboard dengan membawa parameter URL tim
+                    window.location.href = this.generatedLink;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
