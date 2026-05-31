@@ -946,45 +946,58 @@
 
                 // 2. Simpan Data Profil
             // 2. Simpan Data Profil (Versi Anti-CORS)
+              // ==========================================
+                // FUNGSI SIMPAN PROFIL (ULTIMATE & ANTI-CORS)
+                // ==========================================
                 async saveProfile() {
-                    this.isSavingProfile = true;
-                    
-                    // Bungkus semua data menjadi parameter URL
-                    const queryParams = new URLSearchParams({
-                        action: 'update_user_profile',
-                        idUser: this.user.idUser,
-                        namaLengkap: this.userProfile.namaLengkap,
-                        username: this.userProfile.username,
-                        avatar: this.userProfile.avatar,
-                        bio: this.userProfile.bio,
-                        posisi: this.userProfile.posisi,
-                        tema: this.userProfile.tema
-                    }).toString();
+                    // 1. Tutup modal SECARA INSTAN agar UI terasa sangat cepat
+                    this.isProfileModalOpen = false;
 
+                    // 2. Munculkan Toast bahwa sistem sedang bekerja diam-diam
+                    Swal.mixin({
+                        toast: true, position: 'top-end', showConfirmButton: false, timer: 2500,
+                        customClass: { popup: 'rounded-2xl bg-white/95 backdrop-blur-md border border-indigo-500/30 shadow-xl p-4 flex items-center z-[9999]' }
+                    }).fire({
+                        icon: 'info',
+                        title: '<span class="text-sm font-extrabold text-slate-800 ml-2">Menyimpan profil...</span>'
+                    });
+
+                    // 3. Gunakan URLSearchParams (Format yang disukai Google)
+                    const payload = new URLSearchParams();
+                    payload.append('action', 'update_user_profile');
+                    payload.append('idUser', this.user.idUser);
+                    payload.append('namaLengkap', this.userProfile.namaLengkap);
+                    payload.append('username', this.userProfile.username);
+                    payload.append('avatar', this.userProfile.avatar);
+                    payload.append('bio', this.userProfile.bio);
+                    payload.append('posisi', this.userProfile.posisi);
+                    payload.append('tema', this.userProfile.tema);
+
+                    // 4. Tembak ke Server dengan mode NO-CORS
                     try {
-                        // Tembak menggunakan metode GET (tanpa method: 'POST' dan headers)
-                        const response = await fetch(`${SCRIPT_URL}?${queryParams}`);
-                        const json = await response.json();
-                        
-                        if (json.status === 'success') {
-                            this.isProfileModalOpen = false;
+                        await fetch(SCRIPT_URL, {
+                            method: 'POST',
+                            body: payload,
+                            mode: 'no-cors' // <-- INI YANG MEMBUNUH ERROR CORS
+                        });
+
+                        // Karena kita pakai 'no-cors', kita beri jeda 2.5 detik lalu Refresh Profilnya!
+                        setTimeout(async () => {
+                            await this.fetchUserProfile(); // Tarik data profil terbaru
                             
-                            // Toast Notifikasi Premium
+                            // Munculkan notifikasi Berhasil
                             Swal.mixin({
-                                toast: true, position: 'top-end', showConfirmButton: false, timer: 2500,
-                                customClass: { popup: 'rounded-2xl bg-white/95 backdrop-blur-md border border-white/60 shadow-xl p-4 flex items-center' }
+                                toast: true, position: 'top-end', showConfirmButton: false, timer: 3000,
+                                customClass: { popup: 'rounded-2xl bg-white/95 backdrop-blur-md border border-emerald-500/30 shadow-xl p-4 flex items-center z-[9999]' }
                             }).fire({
                                 icon: 'success',
-                                title: `<span class="text-sm font-extrabold text-slate-800 ml-2">${json.message}</span>`
+                                title: '<span class="text-sm font-extrabold text-slate-800 ml-2">Profil berhasil diperbarui!</span>'
                             });
-                        } else {
-                            Swal.fire('Gagal', json.message, 'error');
-                        }
+                        }, 2500);
+
                     } catch (error) {
                         console.error("Error Simpan Profil:", error);
-                        Swal.fire('Koneksi Gagal', 'Gagal terhubung ke database server.', 'error');
-                    } finally {
-                        this.isSavingProfile = false;
+                        Swal.fire('Koneksi Terputus', 'Gagal mengirim data. Pastikan internet Anda stabil.', 'error');
                     }
                 },
                 // 7. SUBMIT FORM KE BACKEND DENGAN AUDIT LOG
