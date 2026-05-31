@@ -640,6 +640,10 @@
                 // MESIN MULTIPLAYER & JEJAK REAL-TIME
                 // ==========================================
                 
+              // ==========================================
+                // MESIN MULTIPLAYER & JEJAK REAL-TIME
+                // ==========================================
+                
                 // Menghasilkan warna unik & tetap berdasarkan nama user
                 getAvatarColor(name) {
                     const colors = ['bg-indigo-500', 'bg-fuchsia-500', 'bg-emerald-500', 'bg-rose-500', 'bg-cyan-500', 'bg-amber-500', 'bg-violet-500'];
@@ -710,6 +714,8 @@
                         if(e.key && e.key.startsWith('omni_presence_')) readPresence();
                     });
                 },
+            
+            
                 async fetchData() {
                     this.isLoading = true;
                     this.cards = [];
@@ -946,14 +952,14 @@
 
                 // 2. Simpan Data Profil
             // 2. Simpan Data Profil (Versi Anti-CORS)
-              // ==========================================
-                // FUNGSI SIMPAN PROFIL (ULTIMATE & ANTI-CORS)
+             // ==========================================
+                // FUNGSI SIMPAN PROFIL (JURUS PAMUNGKAS NO-CORS)
                 // ==========================================
                 async saveProfile() {
-                    // 1. Tutup modal SECARA INSTAN agar UI terasa sangat cepat
+                    // 1. Tutup modal SECARA INSTAN
                     this.isProfileModalOpen = false;
 
-                    // 2. Munculkan Toast bahwa sistem sedang bekerja diam-diam
+                    // 2. Munculkan Toast loading
                     Swal.mixin({
                         toast: true, position: 'top-end', showConfirmButton: false, timer: 2500,
                         customClass: { popup: 'rounded-2xl bg-white/95 backdrop-blur-md border border-indigo-500/30 shadow-xl p-4 flex items-center z-[9999]' }
@@ -962,30 +968,29 @@
                         title: '<span class="text-sm font-extrabold text-slate-800 ml-2">Menyimpan profil...</span>'
                     });
 
-                    // 3. Gunakan URLSearchParams (Format yang disukai Google)
-                    const payload = new URLSearchParams();
-                    payload.append('action', 'update_user_profile');
-                    payload.append('idUser', this.user.idUser);
-                    payload.append('namaLengkap', this.userProfile.namaLengkap);
-                    payload.append('username', this.userProfile.username);
-                    payload.append('avatar', this.userProfile.avatar);
-                    payload.append('bio', this.userProfile.bio);
-                    payload.append('posisi', this.userProfile.posisi);
-                    payload.append('tema', this.userProfile.tema);
+                    // 3. Gunakan FormData murni (Sama seperti fitur simpan kartu yang sukses)
+                    const formData = new FormData();
+                    formData.append('action', 'update_user_profile');
+                    formData.append('idUser', this.user.idUser);
+                    formData.append('namaLengkap', this.userProfile.namaLengkap);
+                    formData.append('username', this.userProfile.username);
+                    formData.append('avatar', this.userProfile.avatar);
+                    formData.append('bio', this.userProfile.bio);
+                    formData.append('posisi', this.userProfile.posisi);
+                    formData.append('tema', this.userProfile.tema);
 
-                    // 4. Tembak ke Server dengan mode NO-CORS
+                    // 4. Tembak ke Server dengan mode NO-CORS (Anti-Error)
                     try {
                         await fetch(SCRIPT_URL, {
                             method: 'POST',
-                            body: payload,
-                            mode: 'no-cors' // <-- INI YANG MEMBUNUH ERROR CORS
+                            body: formData,
+                            mode: 'no-cors' // <-- JURUS MEMBUNUH CORS
                         });
 
-                        // Karena kita pakai 'no-cors', kita beri jeda 2.5 detik lalu Refresh Profilnya!
+                        // Beri jeda 2.5 detik lalu refresh data profil
                         setTimeout(async () => {
-                            await this.fetchUserProfile(); // Tarik data profil terbaru
+                            await this.fetchUserProfile();
                             
-                            // Munculkan notifikasi Berhasil
                             Swal.mixin({
                                 toast: true, position: 'top-end', showConfirmButton: false, timer: 3000,
                                 customClass: { popup: 'rounded-2xl bg-white/95 backdrop-blur-md border border-emerald-500/30 shadow-xl p-4 flex items-center z-[9999]' }
