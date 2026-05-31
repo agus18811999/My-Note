@@ -79,48 +79,45 @@
 </head>
 <body x-data="workspaceApp()" x-init="initApp()">
 
-  <!-- Tambahkan md:relative md:translate-x-0 agar permanen di Laptop -->
-  <aside class="glass-sidebar w-72 h-full flex flex-col z-50 shrink-0 transition-transform duration-300 fixed inset-y-0 left-0 md:relative md:translate-x-0" :class="isSidebarOpen ? 'translate-x-0 shadow-2xl md:shadow-none' : '-translate-x-full'">
-        
-        <div class="p-6 border-b border-white/50 flex items-center justify-between shrink-0">
+    <aside class="glass-sidebar w-72 h-full flex flex-col z-50 shrink-0 transition-transform duration-300 fixed inset-y-0 left-0 md:relative md:translate-x-0" :class="isSidebarOpen ? 'translate-x-0 shadow-2xl md:shadow-none' : '-translate-x-full'"> 
+        <div class="p-6 border-b border-white/50 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-fuchsia-500 rounded-xl flex items-center justify-center shadow-lg text-white font-bold text-lg shrink-0">
+                <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-fuchsia-500 rounded-xl flex items-center justify-center shadow-lg text-white font-bold text-lg">
                     <i class="fa-solid fa-layer-group"></i>
                 </div>
-                <div class="overflow-hidden">
-                    <h2 class="font-extrabold text-slate-800 text-sm tracking-wide truncate">OmniSpace</h2>
-                    <p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold truncate">Workspace</p>
+                <div>
+                    <h2 class="font-extrabold text-slate-800 text-sm tracking-wide">OmniSpace</h2>
+                    <p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Workspace</p>
                 </div>
             </div>
-            <button @click="isSidebarOpen = false" class="md:hidden text-slate-500 hover:text-rose-500 transition-colors"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <button @click="isSidebarOpen = false" class="md:hidden text-slate-500 hover:text-slate-800"><i class="fa-solid fa-xmark text-xl"></i></button>
         </div>
-
-        <div class="px-5 py-4 border-b border-white/30 shrink-0 bg-white/10">
-            <div @click="showOnlineModal = true" class="flex items-center justify-between cursor-pointer group bg-white/50 hover:bg-white/80 border border-white/60 rounded-xl p-2 transition-all duration-300 shadow-sm">
-                <div class="flex -space-x-2 overflow-hidden px-1">
-                    <template x-for="ou in onlineUsers.slice(0, 4)" :key="ou.id">
-                        <div :class="ou.color" class="inline-flex h-6 w-6 rounded-full text-white font-extrabold text-[9px] items-center justify-center ring-2 ring-white relative hover:z-20 hover:-translate-y-1 transition-transform cursor-help shadow-sm" :title="ou.name" x-text="ou.initial"></div>
-                    </template>
-                    <div x-show="onlineUsers.length > 4" class="inline-flex h-6 w-6 rounded-full bg-slate-200 text-slate-600 font-extrabold text-[9px] items-center justify-center ring-2 ring-white relative z-0">
-                        <span x-text="'+' + (onlineUsers.length - 4)"></span>
+        <div class="px-5 py-3 border-b border-white/30 shrink-0 bg-gradient-to-b from-white/20 to-transparent">
+                <div @click="showOnlineModal = true" class="flex items-center justify-between cursor-pointer group bg-white/40 hover:bg-white/70 border border-white/60 rounded-xl p-2 transition-all duration-300 shadow-sm">
+                    
+                    <div class="flex -space-x-2 overflow-hidden px-1">
+                        <template x-for="ou in onlineUsers.slice(0, 4)" :key="ou.id">
+                            <div :class="ou.color" class="inline-flex h-6 w-6 rounded-full text-white font-extrabold text-[9px] items-center justify-center ring-2 ring-[#eef2fa] relative hover:z-20 hover:-translate-y-1 transition-transform cursor-help shadow-sm" :title="ou.name" x-text="ou.initial"></div>
+                        </template>
+                        <div x-show="onlineUsers.length > 4" class="inline-flex h-6 w-6 rounded-full bg-slate-200 text-slate-600 font-extrabold text-[9px] items-center justify-center ring-2 ring-[#eef2fa] relative z-0">
+                            <span x-text="'+' + (onlineUsers.length - 4)"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-1.5 pr-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_5px_#10b981]"></span>
+                        <span class="text-[9px] font-extrabold text-slate-500 uppercase tracking-widest group-hover:text-indigo-600 transition-colors" x-text="onlineUsers.length + ' Aktif'"></span>
                     </div>
                 </div>
-                
-                <div class="flex items-center gap-1.5 pr-1 shrink-0">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_5px_#10b981]"></span>
-                    <span class="text-[9px] font-extrabold text-slate-500 uppercase tracking-widest group-hover:text-indigo-600 transition-colors" x-text="onlineUsers.length + ' Aktif'"></span>
-                </div>
             </div>
-        </div>
-
-        <nav class="flex-1 overflow-y-auto py-5 px-3 space-y-6" style="scrollbar-width: none;">
+<nav class="flex-1 overflow-y-auto py-4 px-3 space-y-6" style="scrollbar-width: none;">
             <template x-for="(group, gIndex) in menuGroups" :key="gIndex">
                 <div>
-                    <h3 class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest px-3 mb-2.5" x-text="group.category"></h3>
+                    <h3 class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest px-3 mb-2" x-text="group.category"></h3>
                     <ul class="space-y-1">
                         <template x-for="item in group.items" :key="item.tabName">
                             <li>
-                                <button @click="switchFeature(item); isSidebarOpen = false" :class="activeFeature.tabName === item.tabName ? 'menu-active' : 'text-slate-600 hover:bg-white/40'" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all text-left group">
+                                <button @click="switchFeature(item)" :class="activeFeature.tabName === item.tabName ? 'menu-active' : 'text-slate-600 hover:bg-white/40'" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all text-left group">
                                     
                                     <div class="flex items-center gap-3 overflow-hidden">
                                         <i :class="item.icon" class="w-5 text-center text-slate-400 group-hover:text-indigo-500 transition-colors shrink-0"></i>
@@ -132,8 +129,7 @@
                                             <div :class="ou.color" class="w-4 h-4 rounded-full text-white flex items-center justify-center text-[7px] font-extrabold ring-1 ring-white shadow-sm animate-bounce" :title="ou.name + ' sedang melihat ini'" x-text="ou.initial"></div>
                                         </template>
                                     </div>
-
-                                </button>
+                                    </button>
                             </li>
                         </template>
                     </ul>
@@ -141,62 +137,68 @@
             </template>
         </nav>
 
-        <div class="p-4 border-t border-white/40 mt-auto shrink-0 bg-white/10">
-            <div @click="isProfileModalOpen = true" class="bg-white/40 border border-white/60 p-3 rounded-2xl flex items-center gap-3 cursor-pointer hover:bg-white/70 transition-all shadow-sm group">
-                
-                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-fuchsia-500 flex items-center justify-center text-white font-bold shadow-inner shrink-0 overflow-hidden border-2 border-white">
-                    <template x-if="userProfile.avatar">
-                        <img :src="userProfile.avatar" @error="userProfile.avatar = ''" class="w-full h-full object-cover">
-                    </template>
-                    <template x-if="!userProfile.avatar">
-                        <span x-text="userProfile.namaLengkap ? userProfile.namaLengkap.charAt(0).toUpperCase() : 'U'"></span>
-                    </template>
+      <div class="p-4 border-t border-white/40 mt-auto">
+                <div @click="isProfileModalOpen = true" class="bg-white/40 border border-white/60 p-3 rounded-2xl flex items-center gap-3 cursor-pointer hover:bg-white/70 transition-all shadow-sm group">
+                    
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-fuchsia-500 flex items-center justify-center text-white font-bold shadow-inner shrink-0 overflow-hidden border-2 border-white">
+                        <template x-if="userProfile.avatar">
+                            <img :src="userProfile.avatar" class="w-full h-full object-cover">
+                        </template>
+                        <template x-if="!userProfile.avatar">
+                            <span x-text="userProfile.namaLengkap.charAt(0).toUpperCase()"></span>
+                        </template>
+                    </div>
+                    
+                    <div class="flex flex-col overflow-hidden flex-1">
+                        <span class="text-xs font-extrabold text-slate-800 truncate" x-text="userProfile.namaLengkap"></span>
+                        <span class="text-[10px] font-bold text-slate-500 truncate" x-text="userProfile.posisi"></span>
+                    </div>
+                    
+                    <i class="fa-solid fa-gear text-slate-400 group-hover:text-indigo-600 transition-colors text-sm animate-spin-slow"></i>
                 </div>
                 
-                <div class="flex flex-col overflow-hidden flex-1">
-                    <span class="text-xs font-extrabold text-slate-800 truncate" x-text="userProfile.namaLengkap"></span>
-                    <span class="text-[10px] font-bold text-slate-500 truncate" x-text="userProfile.posisi"></span>
-                </div>
-                
-                <i class="fa-solid fa-gear text-slate-400 group-hover:text-indigo-600 transition-colors text-sm animate-spin-slow"></i>
+                <button 
+    @click="logout()"
+    class="w-full mt-2 text-[10px] font-extrabold text-rose-500 hover:text-rose-600 hover:bg-rose-50 py-2 rounded-xl transition-colors uppercase tracking-widest flex justify-center items-center gap-2">
+    <i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out
+</button>
             </div>
-            
-            <button class="w-full mt-2 text-[10px] font-extrabold text-rose-500 hover:text-rose-600 hover:bg-rose-50 py-2 rounded-xl transition-colors uppercase tracking-widest flex justify-center items-center gap-2">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out
-            </button>
-        </div>
     </aside>
+
     <main class="flex-1 flex flex-col h-full overflow-hidden relative">
         
       <!-- ========================================== -->
-        <!-- HEADER UTAMA (RESPONSIF MOBILE & DESKTOP)  -->
+        <!-- HEADER UTAMA DENGAN JAM DIGITAL (RESPONSIF) -->
         <!-- ========================================== -->
-       <header class="glass-header !h-auto min-h-[5rem] py-4 px-4 md:px-6 flex flex-wrap md:flex-nowrap items-center justify-between shrink-0 z-10 gap-4">
+        <!-- Menghapus tinggi tetap (h-20) menjadi py-3 agar bisa membesar saat jam turun ke baris baru di HP -->
+        <header class="glass-header min-h-[5rem] py-3 px-4 sm:px-6 flex flex-wrap md:flex-nowrap items-center justify-between shrink-0 z-10 gap-3">
             
+            <!-- 1. Bagian Kiri: Tombol Mobile & Judul Fitur (Urutan 1) -->
             <div class="flex items-center gap-3 md:gap-4 order-1">
                 <button @click="isSidebarOpen = true" class="md:hidden text-slate-600 hover:text-indigo-600 focus:outline-none">
                     <i class="fa-solid fa-bars text-xl"></i>
                 </button>
                 <div>
-                    <h1 class="text-xl md:text-2xl font-extrabold text-slate-800 truncate max-w-[150px] sm:max-w-xs" x-text="activeFeature.title"></h1>
-                    <p class="text-[10px] md:text-[11px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1.5 md:gap-2">
-                        <i :class="activeFeature.icon" class="text-indigo-400"></i> Database 
-                        <i class="fa-solid fa-chevron-right text-[8px] opacity-50"></i> 
-                        <span class="truncate max-w-[100px] sm:max-w-none" x-text="activeFeature.tabName"></span>
+                    <h1 class="text-lg sm:text-2xl font-extrabold text-slate-800 truncate max-w-[130px] sm:max-w-xs" x-text="activeFeature.title"></h1>
+                    <p class="text-[9px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
+                        <i :class="activeFeature.icon" class="text-indigo-400"></i> Database <i class="fa-solid fa-chevron-right text-[8px] opacity-50"></i> <span class="truncate max-w-[80px] sm:max-w-none" x-text="activeFeature.tabName"></span>
                     </p>
                 </div>
             </div>
 
-            <div class="flex justify-center items-center gap-2.5 bg-white/50 border border-white/60 px-5 py-2.5 rounded-full shadow-[inset_0_1px_3px_rgba(255,255,255,0.8)] backdrop-blur-md order-3 md:order-2 w-full md:w-auto mt-1 md:mt-0">
-                <i class="fa-regular fa-clock text-indigo-500 text-sm animate-pulse"></i>
-                <span class="text-slate-600 font-extrabold text-xs tracking-wide" x-text="currentTime"></span>
-            </div>
-            
-            <button @click="openModal('add')" class="shrink-0 bg-gradient-to-r from-indigo-600 to-fuchsia-600 hover:from-indigo-700 hover:to-fuchsia-700 text-white font-bold py-2.5 px-4 md:px-6 rounded-xl shadow-lg hover:shadow-indigo-500/30 transition-all transform hover:-translate-y-0.5 flex items-center gap-2 text-xs md:text-sm order-2 md:order-3">
+            <!-- 2. Bagian Kanan: Tombol Tambah Data (Di HP jadi Urutan 2, bersebelahan dengan Judul) -->
+            <button @click="openModal('add')" class="shrink-0 bg-gradient-to-r from-indigo-600 to-fuchsia-600 hover:from-indigo-700 hover:to-fuchsia-700 text-white font-bold py-2 px-4 sm:py-2.5 sm:px-6 rounded-xl shadow-lg hover:shadow-indigo-500/30 transition-all transform hover:-translate-y-0.5 flex items-center gap-2 text-xs sm:text-sm order-2 md:order-3">
                 <i class="fa-solid fa-plus"></i> 
+                <!-- Teks disembunyikan di HP agar tombol tidak kepanjangan -->
                 <span class="hidden sm:inline" x-text="'Tambah ' + activeFeature.title"></span>
                 <span class="sm:hidden">Tambah</span>
             </button>
+
+            <!-- 3. Bagian Tengah/Bawah: Jam Digital Real-Time (Di HP jadi Urutan 3, turun ke baris baru) -->
+            <div class="flex items-center justify-center gap-2 bg-white/50 border border-white/60 px-4 py-1.5 sm:py-2 rounded-full shadow-[inset_0_1px_3px_rgba(255,255,255,0.8)] backdrop-blur-md order-3 md:order-2 w-full md:w-auto mt-1 md:mt-0">
+                <i class="fa-regular fa-clock text-indigo-500 text-xs sm:text-sm animate-pulse"></i>
+                <span class="text-slate-600 font-extrabold text-[10px] sm:text-xs tracking-wide text-center" x-text="currentTime"></span>
+            </div>
 
         </header>
 
@@ -210,8 +212,9 @@
            <!-- ========================================== -->
             <!-- AREA FILTER STATUS (Responsif Mobile)      -->
             <!-- ========================================== -->
-            <div class="flex justify-center mt-6 md:mt-2 mb-8 px-2 w-full overflow-hidden shrink-0">
+            <div class="flex justify-center mb-8 px-2 w-full overflow-hidden">
                 <div class="bg-white/40 border border-white/60 p-1.5 rounded-full shadow-sm backdrop-blur-md max-w-full">
+                    <!-- Penambahan overflow-x-auto dan whitespace-nowrap -->
                     <div class="flex items-center gap-1 overflow-x-auto hide-scrollbar" style="scrollbar-width: none; -ms-overflow-style: none;">
                         <template x-for="status in activeFeature.boardStatuses" :key="status">
                             <button @click="activeStatusFilter = status"
@@ -257,7 +260,7 @@
                             
                             <p class="text-[11px] text-slate-600 mb-3 line-clamp-2 leading-relaxed" x-text="getCardDesc(card)"></p>
 
-                         <!-- Baris 4: Kotak Tanggal (Responsif di Layar HP) -->
+                          <!-- Baris 4: Kotak Tanggal (Responsif di Layar HP) -->
                             <!-- Menggunakan flex-col di HP, dan flex-row (berdampingan) di layar sm ke atas -->
                             <div class="flex flex-col sm:flex-row gap-2 sm:gap-4 mb-3 bg-white/40 p-2.5 rounded-xl border border-white/50 shadow-sm" x-show="getCardStartDate(card) || getCardEndDate(card)">
                                 
@@ -404,7 +407,7 @@
                     <div class="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-500 to-fuchsia-500 flex items-center justify-center shadow-sm text-white">
                         <i class="fa-regular fa-id-badge text-lg"></i>
                     </div>
-                    Pengaturan Profile
+                    Pengaturan Profil
                 </h2>
                 <button @click="isProfileModalOpen = false" class="text-slate-400 hover:text-rose-500 w-8 h-8 bg-white rounded-full flex items-center justify-center transition-all shadow-sm"><i class="fa-solid fa-xmark"></i></button>
             </div>
@@ -450,7 +453,7 @@
 
                     <div class="pt-4 mt-2">
                         <button type="submit" :disabled="isSavingProfile" class="w-full bg-gradient-to-r from-indigo-600 to-fuchsia-600 hover:from-indigo-700 hover:to-fuchsia-700 text-white font-bold py-3.5 rounded-xl shadow-xl transition-all transform hover:-translate-y-1 flex justify-center items-center gap-2">
-                            <span x-text="isSavingProfile ? 'Menyimpan Profile...' : 'Simpan Perubahan'"></span>
+                            <span x-text="isSavingProfile ? 'Menyimpan Profil...' : 'Simpan Perubahan'"></span>
                             <i class="fa-solid fa-floppy-disk" x-show="!isSavingProfile"></i>
                             <i class="fa-solid fa-circle-notch fa-spin" x-show="isSavingProfile"></i>
                         </button>
@@ -459,7 +462,7 @@
             </div>
         </div>
     </div>
-    <div x-show="showOnlineModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md" x-transition.opacity>
+<div x-show="showOnlineModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md" x-transition.opacity>
         <div class="glass-panel w-full max-w-md rounded-[2rem] overflow-hidden shadow-2xl flex flex-col border border-white/60 bg-white/50" @click.away="showOnlineModal = false" x-transition>
             
             <div class="p-6 border-b border-white/50 flex justify-between items-center bg-white/60 shrink-0">
@@ -491,7 +494,6 @@
             </div>
         </div>
     </div>
-
     <script>
         // ========================================================
         // KUNCI UTAMA SCRIPT BACKEND & APLIKASI
@@ -520,23 +522,28 @@
                     posisi: 'Product Manager',
                     tema: 'light'
                 },
-                // STATE MULTIPLAYER (REAL-TIME PRESENCE)
-                onlineUsers: [],
-                showOnlineModal: false,
-                mySessionId: 'sess_' + Math.random().toString(36).substr(2, 9),
                 // State Modal Dinamis
                 modalOpen: false,
                 modalMode: 'add',
                 formData: {},
                 currentHeaders: [], // Akan diisi otomatis oleh nama kolom dari Sheet
-                
+                // STATE MULTIPLAYER (REAL-TIME PRESENCE)
+                onlineUsers: [],
+                showOnlineModal: false,
+                mySessionId: 'sess_' + Math.random().toString(36).substr(2, 9),
                 // Data Board
                 cards: [],
 
                 // Konfigurasi Dinamis 31 Fitur (Sebagian yang utama)
                 // Kategori: 1. Agile & Task, 2. CRM & Sales, 3. HR & General
                 // Konfigurasi Dinamis 28 Fitur Operasional Lengkap
-                activeFeature: {},
+               activeFeature: {
+    tabName: "Sprints",
+    title: "Sprint Planner",
+    icon: "fa-solid fa-bolt",
+    idKey: "ID Task",
+    boardStatuses: ["To Do", "In Progress", "Done"]
+},
                 menuGroups: [
                     {
                         category: "🎯 Project & Task",
@@ -598,27 +605,29 @@
                     }
                 ],
                 // 1. FUNGSI INISIALISASI (Pengecekan Keamanan Ganda)
-                async initApp() {
-                    const localUser = JSON.parse(localStorage.getItem('notionClone_User') || '{}');
-                    const localTeam = localStorage.getItem('notionClone_idTim');
+             async initApp() {
+    const localUser = JSON.parse(localStorage.getItem('notionClone_User') || '{}');
+    const localTeam = localStorage.getItem('notionClone_idTim');
 
-                    // Jika tidak ada akses, tendang kembali ke halaman Login!
-                    if (!localUser.emailUser || !localTeam) {
-                        window.location.href = "auth.html"; // Ganti dengan nama file login-mu
-                        return;
-                    }
+    if (!localUser.emailUser || !localTeam) {
+        window.location.href = "auth.html";
+        return;
+    }
 
-                  this.user = { email: localUser.emailUser, idUser: localUser.idUser };
-                    this.idTim = localTeam;
 
-                    // Set default fitur yang terbuka pertama kali
-                    this.activeFeature = this.menuGroups[0].items[0];
-                    this.activeStatusFilter = this.activeFeature.boardStatuses[0]; // <--- TAMBAHKAN BARIS INI
-                    this.fetchData();
-                    this.initPresence();
-                    this.startClock();
-                },
 
+   this.user = { email: localUser.emailUser, idUser: localUser.idUser };
+this.idTim = localTeam;
+
+await this.fetchUserProfile();
+
+this.activeFeature = this.menuGroups[0].items[0];
+this.activeStatusFilter = this.activeFeature.boardStatuses[0];
+
+this.fetchData();
+this.startClock();
+this.initPresence();
+},
                 // 2. LOGOUT
                 logout() {
                     localStorage.removeItem('notionClone_User');
@@ -636,11 +645,75 @@
 
                 // 4. TARIK DATA DARI DATABASE (GET REQUEST)
      // 4. TARIK DATA DARI DATABASE (DENGAN DETEKSI ERROR)
-         // ==========================================
-                // MESIN MULTIPLAYER & JEJAK REAL-TIME
+                async fetchData() {
+                    this.isLoading = true;
+                    this.cards = [];
+                    this.currentHeaders = [];
+
+                    try {
+                        const response = await fetch(`${SCRIPT_URL}?action=get_features_data&targetTab=${this.activeFeature.tabName}&idTim=${this.idTim}`);
+                        const json = await response.json();
+                        
+                        if(json.status === "success") {
+                            this.cards = json.data || [];
+                            
+                            // Cek apakah backend berhasil membaca Baris 1
+                            if (json.headers && json.headers.length > 0) {
+                                this.currentHeaders = json.headers;
+                            } else {
+                                // DETEKSI ERROR: Jika gagal, munculkan peringatan!
+                                Swal.fire('Informasi Database', `Baris 1 di tab "${this.activeFeature.tabName}" Google Sheets masih kosong. Silakan isi judul-judul kolomnya di Baris 1 agar form bisa muncul.`, 'warning');
+                            }
+                        } else {
+                            Swal.fire('Akses Ditolak', json.message, 'error');
+                        }
+                    } catch(e) {
+                        console.error(e);
+                        Swal.fire('Koneksi Gagal', 'Pastikan URL Apps Script sudah di-deploy dengan Versi Baru.', 'error');
+                    } finally {
+                        this.isLoading = false;
+                    }
+                },
+             
+                // 5. HELPER RENDER KANBAN
+               // 5. HELPER RENDER KANBAN (KOMPONEN DINAMIS)
+             // ==========================================
+             // ==========================================
+                // MESIN JAM DIGITAL REAL-TIME
                 // ==========================================
-                
-              // ==========================================
+                startClock() {
+                    const updateTime = () => {
+                        const now = new Date();
+                        const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+                        const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+                        const dayName = days[now.getDay()];
+                        const date = now.getDate();
+                        const monthName = months[now.getMonth()];
+                        const year = now.getFullYear();
+
+                        const hours = String(now.getHours()).padStart(2, '0');
+                        const minutes = String(now.getMinutes()).padStart(2, '0');
+                        const seconds = String(now.getSeconds()).padStart(2, '0');
+
+                        // Format: "Minggu, 31 Mei 2026 • 05:39:44"
+                        this.currentTime = `${dayName}, ${date} ${monthName} ${year} • ${hours}:${minutes}:${seconds}`;
+                    };
+                    updateTime(); // Panggil pertama kali agar tidak kosong 1 detik awal
+                    setInterval(updateTime, 1000); // Perbarui setiap 1 detik
+                },
+                // 5. HELPER RENDER KANBAN (SUPER DINAMIS)
+                // ==========================================
+                getCardsByStatus(status) {
+                    return this.cards.filter(c => c.Status === status);
+                },
+
+                // PENDETEKSI JUDUL OTOMATIS (Mencari kolom yang ada kata 'Nama')
+                getCardTitle(card) {
+                    const titleKey = Object.keys(card).find(k => k.toLowerCase().includes('nama'));
+                    return titleKey && card[titleKey] ? card[titleKey] : "Untitled Card";
+                },
+                // ==========================================
                 // MESIN MULTIPLAYER & JEJAK REAL-TIME
                 // ==========================================
                 
@@ -714,75 +787,7 @@
                         if(e.key && e.key.startsWith('omni_presence_')) readPresence();
                     });
                 },
-            
-            
-                async fetchData() {
-                    this.isLoading = true;
-                    this.cards = [];
-                    this.currentHeaders = [];
 
-                    try {
-                        const response = await fetch(`${SCRIPT_URL}?action=get_features_data&targetTab=${this.activeFeature.tabName}&idTim=${this.idTim}`);
-                        const json = await response.json();
-                        
-                        if(json.status === "success") {
-                            this.cards = json.data || [];
-                            
-                            // Cek apakah backend berhasil membaca Baris 1
-                            if (json.headers && json.headers.length > 0) {
-                                this.currentHeaders = json.headers;
-                            } else {
-                                // DETEKSI ERROR: Jika gagal, munculkan peringatan!
-                                Swal.fire('Informasi Database', `Baris 1 di tab "${this.activeFeature.tabName}" Google Sheets masih kosong. Silakan isi judul-judul kolomnya di Baris 1 agar form bisa muncul.`, 'warning');
-                            }
-                        } else {
-                            Swal.fire('Akses Ditolak', json.message, 'error');
-                        }
-                    } catch(e) {
-                        console.error(e);
-                        Swal.fire('Koneksi Gagal', 'Pastikan URL Apps Script sudah di-deploy dengan Versi Baru.', 'error');
-                    } finally {
-                        this.isLoading = false;
-                    }
-                },
-                // 5. HELPER RENDER KANBAN
-               // 5. HELPER RENDER KANBAN (KOMPONEN DINAMIS)
-             // ==========================================
-             // ==========================================
-                // MESIN JAM DIGITAL REAL-TIME
-                // ==========================================
-                startClock() {
-                    const updateTime = () => {
-                        const now = new Date();
-                        const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-                        const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-
-                        const dayName = days[now.getDay()];
-                        const date = now.getDate();
-                        const monthName = months[now.getMonth()];
-                        const year = now.getFullYear();
-
-                        const hours = String(now.getHours()).padStart(2, '0');
-                        const minutes = String(now.getMinutes()).padStart(2, '0');
-                        const seconds = String(now.getSeconds()).padStart(2, '0');
-
-                        // Format: "Minggu, 31 Mei 2026 • 05:39:44"
-                        this.currentTime = `${dayName}, ${date} ${monthName} ${year} • ${hours}:${minutes}:${seconds}`;
-                    };
-                    updateTime(); // Panggil pertama kali agar tidak kosong 1 detik awal
-                    setInterval(updateTime, 1000); // Perbarui setiap 1 detik
-                },
-                // 5. HELPER RENDER KANBAN (SUPER DINAMIS)
-                // ==========================================
-                getCardsByStatus(status) {
-                    return this.cards.filter(c => c.Status === status);
-                },
-
-                // PENDETEKSI JUDUL OTOMATIS (Mencari kolom yang ada kata 'Nama')
-                getCardTitle(card) {
-                    const titleKey = Object.keys(card).find(k => k.toLowerCase().includes('nama'));
-                    return titleKey && card[titleKey] ? card[titleKey] : "Untitled Card";
-                },
 
                 // PENDETEKSI DESKRIPSI OTOMATIS
                 getCardDesc(card) {
@@ -869,27 +874,29 @@
             // ==========================================
                 // REVISI SISTEM WARNA BUNGGLON (AURA GLASS EDITION)
                 // ==========================================
-                getFeatureColor(tabName, type) {
-                    const colors = [
-                        { bg: 'bg-indigo-400', text: 'text-indigo-600', border: 'border-indigo-400' },
-                        { bg: 'bg-emerald-400', text: 'text-emerald-600', border: 'border-emerald-400' },
-                        { bg: 'bg-rose-400', text: 'text-rose-600', border: 'border-rose-400' },
-                        { bg: 'bg-amber-400', text: 'text-amber-600', border: 'border-amber-400' },
-                        { bg: 'bg-fuchsia-400', text: 'text-fuchsia-600', border: 'border-fuchsia-400' },
-                        { bg: 'bg-cyan-400', text: 'text-cyan-600', border: 'border-cyan-400' },
-                        { bg: 'bg-violet-400', text: 'text-violet-600', border: 'border-violet-400' }
-                    ];
-                    
-                    // Rumus mengubah nama tab menjadi angka urut warna
-                    let hash = 0;
-                    for (let i = 0; i < tabName.length; i++) {
-                        hash = tabName.charCodeAt(i) + ((hash << 5) - hash);
-                    }
-                    const index = Math.abs(hash) % colors.length;
-                    
-                    return colors[index][type];
-                },
-                    
+          getFeatureColor(tabName, type) {
+    const colors = [
+        { bg: 'bg-indigo-400', text: 'text-indigo-600', border: 'border-indigo-400' },
+        { bg: 'bg-emerald-400', text: 'text-emerald-600', border: 'border-emerald-400' },
+        { bg: 'bg-rose-400', text: 'text-rose-600', border: 'border-rose-400' },
+        { bg: 'bg-amber-400', text: 'text-amber-600', border: 'border-amber-400' },
+        { bg: 'bg-fuchsia-400', text: 'text-fuchsia-600', border: 'border-fuchsia-400' },
+        { bg: 'bg-cyan-400', text: 'text-cyan-600', border: 'border-cyan-400' },
+        { bg: 'bg-violet-400', text: 'text-violet-600', border: 'border-violet-400' }
+    ];
+
+    if (!tabName) {
+        return colors[0][type] || colors[0].bg;
+    }
+
+    let hash = 0;
+    for (let i = 0; i < tabName.length; i++) {
+        hash = tabName.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    const index = Math.abs(hash) % colors.length;
+    return colors[index][type] || colors[index].bg;
+},
              
                 formatForInput(dateStr) {
                     if (!dateStr) return "";
@@ -928,84 +935,162 @@
                 // ==========================================
                 
                 // 1. Tarik Data Profil (Anti-Error jika user baru)
-                async fetchUserProfile() {
-                    try {
-                        const response = await fetch(`${SCRIPT_URL}?action=get_user_profile&idUser=${this.user.idUser}`);
-                        const json = await response.json();
-                        
-                        // Cek apakah data sukses ditarik DAN tidak kosong
-                        if (json.status === 'success' && Object.keys(json.data).length > 0) {
-                            this.userProfile.namaLengkap = json.data['Nama Lengkap'] || this.user.email.split('@')[0];
-                            this.userProfile.username = json.data['Username'] || 'user';
-                            this.userProfile.avatar = json.data['Avatar'] || '';
-                            this.userProfile.bio = json.data['Bio'] || '';
-                            this.userProfile.posisi = json.data['Posisi'] || 'Member';
-                            this.userProfile.tema = json.data['Tema'] || 'light';
-                        } else {
-                            // Jika User Baru (Belum ada di database), panggil nama dari email
-                            this.userProfile.namaLengkap = this.user.email ? this.user.email.split('@')[0] : 'User';
-                        }
-                    } catch (e) {
-                        console.error("Gagal memuat profil:", e);
-                    }
-                },
+async fetchUserProfile() {
+    try {
+        const url = `${SCRIPT_URL}?action=get_user_profile&idUser=${encodeURIComponent(this.user.idUser)}&t=${Date.now()}`;
 
-                // 2. Simpan Data Profil
+        console.log("===== DEBUG FETCH USER PROFILE =====");
+        console.log("URL GET PROFILE:", url);
+
+        const response = await fetch(url);
+        const json = await response.json();
+
+        console.log("RESPONSE GET PROFILE:", json);
+
+        if (json.debugLog) {
+            console.log("DEBUG GET PROFILE BACKEND:", json.debugLog);
+        }
+
+        if (json.status === 'success' && json.data && Object.keys(json.data).length > 0) {
+            const profile = json.data;
+
+            const ambil = (...keys) => {
+                for (const key of keys) {
+                    const realKey = Object.keys(profile).find(k => 
+                        k.trim().toLowerCase() === key.trim().toLowerCase()
+                    );
+
+                    if (
+                        realKey &&
+                        profile[realKey] !== undefined &&
+                        profile[realKey] !== null &&
+                        profile[realKey].toString().trim() !== ""
+                    ) {
+                        return profile[realKey].toString();
+                    }
+                }
+
+                return "";
+            };
+
+            this.userProfile.namaLengkap = ambil("Nama Lengkap", "Nama") || this.user.email.split('@')[0];
+            this.userProfile.username = ambil("Username", "User Name") || "user";
+
+            this.userProfile.avatar = ambil(
+                "Foto Avatar",
+                "Avatar",
+                "Link Foto Avatar",
+                "Link Foto Avatar (URL)"
+            );
+
+            this.userProfile.bio = ambil(
+                "Bio Deskripsi",
+                "Bio",
+                "Deskripsi Bio"
+            );
+
+            this.userProfile.posisi = ambil(
+                "Pekerjaan / Posisi",
+                "Posisi / Pekerjaan",
+                "Posisi",
+                "Pekerjaan"
+            ) || "Member";
+
+            const temaDB = ambil(
+                "Tema Tampilan",
+                "Tema",
+                "Theme",
+                "Mode Tampilan"
+            );
+
+            if (temaDB.toLowerCase().includes("dark")) {
+                this.userProfile.tema = "dark";
+            } else if (temaDB.toLowerCase().includes("system")) {
+                this.userProfile.tema = "system";
+            } else {
+                this.userProfile.tema = "light";
+            }
+
+            console.log("USER PROFILE SET KE FRONTEND:", JSON.parse(JSON.stringify(this.userProfile)));
+        } else {
+            console.warn("DATA PROFIL KOSONG:", json);
+
+            this.userProfile.namaLengkap = this.user.email ? this.user.email.split('@')[0] : "User";
+            this.userProfile.username = "user";
+            this.userProfile.avatar = "";
+            this.userProfile.bio = "";
+            this.userProfile.posisi = "Member";
+            this.userProfile.tema = "light";
+        }
+
+    } catch (e) {
+        console.error("ERROR FETCH PROFILE:", e);
+    }
+},
+// 2. Simpan Data Profil
             // 2. Simpan Data Profil (Versi Anti-CORS)
-             // ==========================================
-                // FUNGSI SIMPAN PROFIL (JURUS PAMUNGKAS NO-CORS)
-                // ==========================================
-                async saveProfile() {
-                    // 1. Tutup modal SECARA INSTAN
-                    this.isProfileModalOpen = false;
+async saveProfile() {
+    this.isSavingProfile = true;
 
-                    // 2. Munculkan Toast loading
-                    Swal.mixin({
-                        toast: true, position: 'top-end', showConfirmButton: false, timer: 2500,
-                        customClass: { popup: 'rounded-2xl bg-white/95 backdrop-blur-md border border-indigo-500/30 shadow-xl p-4 flex items-center z-[9999]' }
-                    }).fire({
-                        icon: 'info',
-                        title: '<span class="text-sm font-extrabold text-slate-800 ml-2">Menyimpan profil...</span>'
-                    });
+    const payloadYangDikirim = {
+        action: 'update_user_profile',
+        idUser: this.user.idUser,
+        namaLengkap: this.userProfile.namaLengkap,
+        username: this.userProfile.username,
+        avatar: this.userProfile.avatar,
+        bio: this.userProfile.bio,
+        posisi: this.userProfile.posisi,
+        tema: this.userProfile.tema
+    };
 
-                    // 3. Gunakan FormData murni (Sama seperti fitur simpan kartu yang sukses)
-                    const formData = new FormData();
-                    formData.append('action', 'update_user_profile');
-                    formData.append('idUser', this.user.idUser);
-                    formData.append('namaLengkap', this.userProfile.namaLengkap);
-                    formData.append('username', this.userProfile.username);
-                    formData.append('avatar', this.userProfile.avatar);
-                    formData.append('bio', this.userProfile.bio);
-                    formData.append('posisi', this.userProfile.posisi);
-                    formData.append('tema', this.userProfile.tema);
+    const queryParams = new URLSearchParams(payloadYangDikirim).toString();
+    const finalURL = `${SCRIPT_URL}?${queryParams}`;
 
-                    // 4. Tembak ke Server dengan mode NO-CORS (Anti-Error)
-                    try {
-                        await fetch(SCRIPT_URL, {
-                            method: 'POST',
-                            body: formData,
-                            mode: 'no-cors' // <-- JURUS MEMBUNUH CORS
-                        });
+    console.log("===== DEBUG SAVE PROFILE FRONTEND =====");
+    console.log("USER:", this.user);
+    console.log("PAYLOAD YANG DIKIRIM:", payloadYangDikirim);
+    console.log("URL UPDATE PROFILE:", finalURL);
 
-                        // Beri jeda 2.5 detik lalu refresh data profil
-                        setTimeout(async () => {
-                            await this.fetchUserProfile();
-                            
-                            Swal.mixin({
-                                toast: true, position: 'top-end', showConfirmButton: false, timer: 3000,
-                                customClass: { popup: 'rounded-2xl bg-white/95 backdrop-blur-md border border-emerald-500/30 shadow-xl p-4 flex items-center z-[9999]' }
-                            }).fire({
-                                icon: 'success',
-                                title: '<span class="text-sm font-extrabold text-slate-800 ml-2">Profil berhasil diperbarui!</span>'
-                            });
-                        }, 2500);
+    try {
+        const response = await fetch(finalURL);
+        const json = await response.json();
 
-                    } catch (error) {
-                        console.error("Error Simpan Profil:", error);
-                        Swal.fire('Koneksi Terputus', 'Gagal mengirim data. Pastikan internet Anda stabil.', 'error');
-                    }
-                },
-                // 7. SUBMIT FORM KE BACKEND DENGAN AUDIT LOG
+        console.log("RESPONSE BACKEND UPDATE PROFILE:", json);
+
+        if (json.debugLog) {
+            console.log("DEBUG UPDATE BACKEND:", json.debugLog);
+            console.table(json.debugLog.kolomYangDiupdate);
+            console.log("KOLOM TIDAK KETEMU:", json.debugLog.kolomTidakKetemu);
+            console.log("BEFORE UPDATE:", json.debugLog.beforeUpdate);
+            console.log("AFTER UPDATE:", json.debugLog.afterUpdate);
+        }
+
+        if (json.status === 'success') {
+            await this.fetchUserProfile();
+
+            console.log("USER PROFILE SETELAH FETCH ULANG:", JSON.parse(JSON.stringify(this.userProfile)));
+
+            this.isProfileModalOpen = false;
+
+            Swal.fire({
+                title: 'Profil Tersimpan',
+                text: 'Cek Console untuk melihat debug update profil.',
+                icon: 'success',
+                timer: 1800,
+                showConfirmButton: false
+            });
+        } else {
+            Swal.fire('Gagal', json.message, 'error');
+        }
+
+    } catch (error) {
+        console.error("ERROR SAVE PROFILE:", error);
+        Swal.fire('Koneksi Gagal', 'Gagal terhubung ke database server.', 'error');
+    } finally {
+        this.isSavingProfile = false;
+    }
+},        
+// 7. SUBMIT FORM KE BACKEND DENGAN AUDIT LOG
               
                 async submitForm() {
                     this.isSubmitting = true;
